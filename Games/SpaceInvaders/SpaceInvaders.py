@@ -50,6 +50,16 @@ class Enemy(pygame.sprite.Sprite):
             self.rect.y += 30
             self.Direction = "Right"
 
+class SpecialEnemy(pygame.sprite.Sprite):
+    def __init__(self):
+
+        super().__init__()
+        self.image = pygame.image.load("EnemySpecial.png").convert_alpha()
+        self.rect = self.image.get_rect()
+
+    def update(self):
+
+        self.rect.x += 1
 
 class TextRender(pygame.sprite.Sprite):
     def __init__(self):
@@ -102,6 +112,8 @@ UpdateLevel = False
 BackGroundSound = pygame.mixer.Sound("BackGround Music.ogg")
 BackGroundSound.set_volume(0.1)
 BackGroundSound.play(-1)
+PowerUps = {"Nuke" : 0}
+SpecialEnemyGroup = pygame.sprite.GroupSingle()
 
 while True:
 
@@ -126,8 +138,10 @@ while True:
                 BulletGroup.add(BulletInit)
                 HasShot = True
             if event.key == K_DOWN:
-                ShipInit.Nuke()
-                print("Nuke")
+                if PowerUps["Nuke"] >= 0:
+                    ShipInit.Nuke()
+                    print("Nuke")
+                    PowerUps["Nuke"] -= 1
 
 
     if HasShot == True:
@@ -148,11 +162,25 @@ while True:
             Level += 1
             TextGroup.update()
 
+    if Cycle % 1000 == 0:
+        SpecialEnemyInit = SpecialEnemy()
+        SpecialEnemyInit.rect.x = 2
+        SpecialEnemyInit.rect.y = 30
+        SpecialEnemyGroup.add(SpecialEnemyInit)
+
+
+
     for i in pygame.sprite.groupcollide(EnemyGroup, BulletGroup, True, True):
         print("Hit")
         HitSound.play()
+        print(i)
+
+    if pygame.sprite.groupcollide(SpecialEnemyGroup, BulletGroup, True, True):
+        PowerUps["Nuke"] += 1
 
     EnemyGroup.update()
+    if Cycle % 2 == 0 :
+        SpecialEnemyGroup.update()
 
     for i in pygame.sprite.groupcollide(EnemyGroup, ShipGroup, True, True):
         quit()
@@ -166,6 +194,7 @@ while True:
 
     BulletGroup.draw(Screen)
     EnemyGroup.draw(Screen)
+    SpecialEnemyGroup.draw(Screen)
     AllSprites.add(ShipGroup, TextGroup)
     AllSprites.draw(Screen)
     pygame.time.delay(10)
