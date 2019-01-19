@@ -106,8 +106,10 @@ Level = 1
 EnemyNumber = 0
 Text = TextRender()
 TextGroup.add(Text)
-HitSound = pygame.mixer.Sound("Hit.ogg")
-ShootSound = pygame.mixer.Sound("Shoot.ogg")
+HitSound = pygame.mixer.Sound("./Sounds/SpaceInvadersHit.ogg")
+ShootSound = pygame.mixer.Sound("./Sounds/SpaceInvadersShoot.ogg")
+ShootSound.set_volume(0.1)
+HitSound.set_volume(0.1)
 UpdateLevel = False
 BackGroundSound = pygame.mixer.Sound("BackGround Music.ogg")
 BackGroundSound.set_volume(0.1)
@@ -162,12 +164,13 @@ while True:
             Level += 1
             TextGroup.update()
 
+    '''
     if Cycle % 1000 == 0:
         SpecialEnemyInit = SpecialEnemy()
         SpecialEnemyInit.rect.x = 2
         SpecialEnemyInit.rect.y = 30
         SpecialEnemyGroup.add(SpecialEnemyInit)
-
+    '''
 
 
     for i in pygame.sprite.groupcollide(EnemyGroup, BulletGroup, True, True):

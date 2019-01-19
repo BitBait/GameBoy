@@ -88,26 +88,26 @@ while True:
         PlayerTwo.MoveUp()
 
 
-    if BallInit.rect.x == 0:
+    if BallInit.rect.x < 0:
         BallInit.rect.x = 400
         Rally = 1
         pygame.time.delay(1000)
         BallInit.speedX = 1
         BallInit.speedY = 1
 
-    if BallInit.rect.x == 800:
+    if BallInit.rect.x > 800:
         BallInit.rect.x = 400
         Rally = 1
         pygame.time.delay(1000)
         BallInit.speedX = 1
         BallInit.speedY = 1
 
-    if BallInit.rect.y == 0 or BallInit.rect.y == 350:
-        BallInit.speedY =-BallInit.speedY
+    if BallInit.rect.y < 0 or BallInit.rect.y > 350:
+        BallInit.speedY = -BallInit.speedY
 
-    if Rally % 5 == 0:
-        BallInit.speedX += 1
-        BallInit.speedY += 1
+    #if Rally % 5 == 0:
+        #BallInit.speedX += 1
+        #BallInit.speedY += 1
 
     BallGroup.update()
     if pygame.sprite.groupcollide(BallGroup, PlayerOneGroup, False, False):
